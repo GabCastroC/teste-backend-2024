@@ -16,6 +16,7 @@ module Services
             ActiveRecord::Base.transaction do
               product.id        ||= params[:id]           if params[:id].present?
               product.name        = params[:name]         if params[:name].present?
+              product.amount       = params[:amount]        if params[:amount].present?
               product.brand       = params[:brand]        if params[:brand].present?
               product.price       = params[:price]        if params[:price].present?
               product.description = params[:description]  if params[:description].present?
