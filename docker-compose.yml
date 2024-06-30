@@ -38,16 +38,20 @@ services:
       KAFKA_BROKERCONNECT: kafka:29092
 
   ms-rails:
+    container_name: ms_rails_app
     build:
       context: ./ms-rails/
       dockerfile: Dockerfile
-    container_name: ms_rails_app
+    volumes:
+      - ./ms-rails:/ms-rails
     depends_on:
       - kafka
     networks: 
       - broker-kafka
     ports:
       - 3000:3000
+    working_dir: /ms-rails
+    command: sh /ms-rails/run.sh
 
   ms-go:
     build:
