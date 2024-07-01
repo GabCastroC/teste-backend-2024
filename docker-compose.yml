@@ -62,12 +62,30 @@ services:
       - kafka
     networks: 
       - broker-kafka
+      - net_mongo
     ports:
       - 3030:3030
+  
+  mongodb:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - net_mongo
 
-
+volumes:
+  mongodb_data:
+    driver: local
 
 networks: 
   broker-kafka:
     driver: bridge
+  net_mongo:
+    driver: bridge  
 
