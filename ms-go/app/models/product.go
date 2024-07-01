@@ -10,6 +10,7 @@ import (
 type Product struct {
 	ID          int       `json:"id" bson:"id,omitempty"`
 	Name        string    `json:"name" bson:"name,omitempty"`
+	Amount      int    `json:"amount"  bson:"amount,omitempty"`
 	Brand       string    `json:"brand"  bson:"brand,omitempty"`
 	Price       float64   `json:"price"  bson:"price,omitempty"`
 	Description string    `json:"description"  bson:"description,omitempty"`
@@ -26,6 +27,7 @@ func (p *Product) Validate() error {
 	return validation.ValidateStruct(&validate,
 		validation.Field(&validate.ID, validation.Required),
 		validation.Field(&validate.Name, validation.Required, validation.Length(4, 0)),
+		validation.Field(&validate.Amount, validation.Required),
 		validation.Field(&validate.Price, validation.Required, validation.Min(0.01), validation.Max(1000000.00)),
 		validation.Field(&validate.Brand, validation.Required),
 		validation.Field(&validate.Description, validation.Required),
