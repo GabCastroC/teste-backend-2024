@@ -3,7 +3,9 @@ package models
 import (
 	"math"
 	"time"
-
+	"encoding/json"
+	"ms-go/app/services/kafka"
+	"context"
 	validation "github.com/go-ozzo/ozzo-validation/v4"
 )
 
@@ -32,4 +34,25 @@ func (p *Product) Validate() error {
 		validation.Field(&validate.Brand, validation.Required),
 		validation.Field(&validate.Description, validation.Required),
 	)
+}
+
+func (p *Product) ProduceProductEvent(ctx context.Context, eventType string, updatedProduct *Product) error {
+	event := map[string]interface{}{
+        "event_type": eventType,
+        "product":    updatedProduct,
+    }
+
+    message, err := json.Marshal(event)
+    if err != nil {
+        return err
+    }
+
+    producer, err := kafka.New().Setup("go-to-rails").Write(message)
+
+	if err != nil {
+        return err
+    }
+    producer.Close()
+
+    return nil
 }

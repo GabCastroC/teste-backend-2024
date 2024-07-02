@@ -7,7 +7,6 @@ import (
 	"ms-go/db"
 	"net/http"
 	"time"
-
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/mongo/options"
 )
@@ -38,6 +37,11 @@ func Create(data models.Product, isAPI bool) (*models.Product, error) {
 	if err != nil {
 		return nil, &helpers.GenericError{Msg: err.Error(), Code: http.StatusInternalServerError}
 	}
+
+	err = data.ProduceProductEvent(context.TODO(), "create", &data)
+    if err != nil {
+        return nil, &helpers.GenericError{Msg: err.Error(), Code: http.StatusInternalServerError}
+    }
 
 	defer db.Disconnect()
 

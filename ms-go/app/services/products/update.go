@@ -7,7 +7,6 @@ import (
 	"ms-go/db"
 	"net/http"
 	"time"
-
 	"go.mongodb.org/mongo-driver/bson"
 )
 
@@ -18,6 +17,7 @@ func Update(data models.Product, isAPI bool) (*models.Product, error) {
 	}
 
 	var product models.Product
+	var err error
 
 	if err := db.Connection().FindOne(context.TODO(), bson.M{"id": data.ID}).Decode(&product); err != nil {
 		return nil, &helpers.GenericError{Msg: "Product Not Found", Code: http.StatusNotFound}
@@ -34,6 +34,11 @@ func Update(data models.Product, isAPI bool) (*models.Product, error) {
 	if err := db.Connection().FindOne(context.TODO(), bson.M{"id": data.ID}).Decode(&product); err != nil {
 		return nil, &helpers.GenericError{Msg: "Product Not Found", Code: http.StatusNotFound}
 	}
+	
+	err = product.ProduceProductEvent(context.TODO(), "update", &data)
+    if err != nil {
+        return nil, &helpers.GenericError{Msg: err.Error(), Code: http.StatusInternalServerError}
+    }
 
 	defer db.Disconnect()
 
