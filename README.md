@@ -15,8 +15,9 @@ Esta aplicação é um sistema de cadastro de produtos que mantém e sincroniza 
 ## Instruções para inicializar o projeto
 
 - Com o Docker instalado no seu ambiente de desenvolvimento, rode o comando para subir os serviços do docker:
-
-~~~docker composer up -d --build~~~
+~~~
+docker composer up -d --build
+~~~
 
 - Para acessar o banco de dados MongoDB utilize uma IDE de sua preferência (utilizei DataGrip) e conecte com as chaves encontradas no 'docker-compose.yml'.
 
